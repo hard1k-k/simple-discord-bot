@@ -171,22 +171,22 @@ async def resume(interaction:Interaction):
         await interaction.send('No track is paused at the moment.')
 
 @client.command(pass_context=True)
-async def stop(ctx):
+async def skip(ctx):
     voice=nextcord.utils.get(client.voice_clients,guild=ctx.guild)
     voice.stop()
-    await ctx.send('Stopped the playing track.')
+    await ctx.send('Skipped the playing track.')
 
 @client.slash_command(guild_ids=[kalaaogeid])
-async def stop(interaction:Interaction):
+async def skip(interaction:Interaction):
     voice=nextcord.utils.get(client.voice_clients,guild=interaction.guild)
     voice.stop()
-    await interaction.send('Stopped the playing track.')
+    await interaction.send('Skipped the playing track.')
 
 @client.command(pass_context=True)
 async def play(ctx, arg):
     voice=ctx.guild.voice_client
-    song=('D:\\discordbot\\music\\'+str(arg)+'.mp3')
-    source=FFmpegOpusAudio(song)
+    song=('D:\\Laptop Transfer\\discordbot\\music\\'+str(arg)+'.mp3')
+    source=nextcord.FFmpegOpusAudio(executable="C:\\ffmpeg\\bin\\ffmpeg.exe",source=song)
     player=voice.play(source,after= lambda x=None: check_queue(ctx,ctx.message.guild.id))
     await ctx.send(f'Playing {arg}.')
 
@@ -195,7 +195,7 @@ async def play(ctx, arg):
 async def play(interaction: Interaction, song):
     voice=interaction.guild.voice_client
     song_=resource_path('music\\'+str(song)+'.mp3')
-    source=FFmpegOpusAudio(song_)
+    source=nextcord.FFmpegOpusAudio(executable="C:\\ffmpeg\\bin\\ffmpeg.exe",source=song_)
     player=voice.play(source,after= lambda x=None: check_queue(interaction,interaction.guild.id))
     await interaction.send(f'Playing {song}.')
 
@@ -203,8 +203,8 @@ async def play(interaction: Interaction, song):
 @client.command(pass_context=True)
 async def queue(ctx,arg):
     voice=ctx.guild.voice_client
-    song=('D:\\discordbot\\music\\'+str(arg)+'.mp3')
-    source=FFmpegOpusAudio(song)
+    song=('D:\\Laptop Transfer\\discordbot\\music\\'+str(arg)+'.mp3')
+    source=nextcord.FFmpegOpusAudio(executable="C:\\ffmpeg\\bin\\ffmpeg.exe",source=song)
 
     guild_id=ctx.message.guild.id 
 
@@ -219,7 +219,7 @@ async def queue(ctx,arg):
 async def queue(interaction: Interaction,song):
     voice=interaction.guild.voice_client
     song_=resource_path('music\\'+str(song)+'.mp3')
-    source=FFmpegOpusAudio(song_)
+    source=nextcord.FFmpegOpusAudio(executable="C:\\ffmpeg\\bin\\ffmpeg.exe",source=song_)
 
     guild_id=interaction.guild.id 
 
@@ -233,9 +233,9 @@ async def queue(interaction: Interaction,song):
 @client.event
 async def on_message(message):
     print(str(message.author) + ': < ' + str(message.content)+" > at "+str(message.created_at.strftime("%Y-%m-%d %H:%M:%S")))
-    if 'phrase' in message.content:
+    if 'slur' in message.content:
         await message.delete()
-        await message.channel.send(f'Tameez mein reh le {message.author}.')
+        await message.channel.send(f'This message was flagged inappropriate, {message.author}.')
     await client.process_commands(message)
 
 @client.command()
@@ -350,4 +350,5 @@ async def button1(interaction_:Interaction):
     await interaction_.send('Buttons',view=myview)
 
 
-client.run('<<BOT TOKEN ID>>')
+client.run('<<BOT API KEY>>')
+
